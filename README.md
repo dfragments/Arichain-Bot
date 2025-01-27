@@ -55,8 +55,8 @@ pip install requests colorama
 # Setup 🚀
 - **Clone the Repository:**
 ```bash
-git clone https://github.com/MrTimonM/
-cd 
+git clone https://github.com/MrTimonM/Arichain-Bot
+cd Arichain-Bot
 ```
 # Prepare users.json:
 Create a **users.json** file in the root directory with the following structure:
