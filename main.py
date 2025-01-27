@@ -1,5 +1,6 @@
 import json
 import time
+import random
 import requests
 from colorama import Fore, Style, init
 from datetime import datetime
@@ -168,29 +169,37 @@ confirmation = input("Do you want to start the script? (yes/no): ").strip().lowe
 if confirmation != "yes":
     exit()
 
-for user in users:
-    print_timestamped(f"Processing user: {user['name']}", Fore.YELLOW)
-    
-    proxy = user.get("proxy")
-    if proxy:
-        ip, city, country = fetch_proxy_info(proxy)
-        if ip and city and country:
-            print_timestamped(f"Proxy connected - IP: {ip}, City: {city}, Country: {country}", Fore.GREEN)
+while True:
+    for user in users:
+        print_timestamped(f"Processing user: {user['name']}", Fore.YELLOW)
+        
+        proxy = user.get("proxy")
+        if proxy:
+            ip, city, country = fetch_proxy_info(proxy)
+            if ip and city and country:
+                print_timestamped(f"Proxy connected - IP: {ip}, City: {city}, Country: {country}", Fore.GREEN)
+            else:
+                print_timestamped("Failed to fetch proxy info", Fore.RED)
         else:
-            print_timestamped("Failed to fetch proxy info", Fore.RED)
-    else:
-        print_timestamped("No proxy provided", Fore.LIGHTBLACK_EX)
+            print_timestamped("No proxy provided", Fore.LIGHTBLACK_EX)
+        
+        if first_request(user['email'], proxy):
+            time.sleep(3)
+            print_timestamped("Sleeping for 3 seconds...", Fore.LIGHTBLACK_EX)
+            second_request(user['wallet_address'], proxy)
+            time.sleep(2)
+            print_timestamped("Sleeping for 2 seconds...", Fore.LIGHTBLACK_EX)
+            checkin_request(user['wallet_address'], proxy)
+            time.sleep(5)
+            print_timestamped("Sleeping for 5 seconds...", Fore.LIGHTBLACK_EX)
+            quiz_idx, q_idx = third_request(user['wallet_address'], proxy)
+            if quiz_idx and q_idx:
+                fourth_request(user['wallet_address'], quiz_idx, q_idx, proxy)
+        print("\n")
+
     
-    if first_request(user['email'], proxy):
-        time.sleep(3)
-        print_timestamped("Sleeping for 3 seconds...", Fore.LIGHTBLACK_EX)
-        second_request(user['wallet_address'], proxy)
-        time.sleep(2)
-        print_timestamped("Sleeping for 2 seconds...", Fore.LIGHTBLACK_EX)
-        checkin_request(user['wallet_address'], proxy)
-        time.sleep(5)
-        print_timestamped("Sleeping for 5 seconds...", Fore.LIGHTBLACK_EX)
-        quiz_idx, q_idx = third_request(user['wallet_address'], proxy)
-        if quiz_idx and q_idx:
-            fourth_request(user['wallet_address'], quiz_idx, q_idx, proxy)
-    print("\n")
+    
+    sleep_duration = random.randint(25 * 3600, 26 * 3600)
+    print_timestamped("All accounts processed ", Fore.LIGHTBLACK_EX)
+    print_timestamped(Fore.GREEN + f"Sleeping for {sleep_duration // 3600} hours..." + Style.RESET_ALL)
+    time.sleep(sleep_duration)
