@@ -20,6 +20,7 @@ Make sure to star ⭐️ this repo for new scripts :D
   - **Check-in**: Perform daily check-ins.
   - **Quiz**: Retrieve and answer quiz questions.
 - **Logging**: Detailed logging with timestamps and color-coded messages for easy debugging.
+- **Sleep**: Process all accounts after every 25-26 hours.
 
 ---
 
